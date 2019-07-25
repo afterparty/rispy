@@ -1,0 +1,13 @@
+[package]
+name = "interpreter"
+version = "0.1.0"
+authors = ["ec2-user"]
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+clap = "2.33.0"
+libc = "0.2"
+
+[build-dependencies]
+cc = "1.0"
