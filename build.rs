@@ -1,8 +1,8 @@
 extern crate bindgen;
 
+use std::collections::HashSet;
 use std::env;
 use std::path::PathBuf;
-use std::collections::HashSet;
 
 #[derive(Debug)]
 struct IgnoreMacros(HashSet<String>);
@@ -11,8 +11,7 @@ impl bindgen::callbacks::ParseCallbacks for IgnoreMacros {
     fn will_parse_macro(&self, name: &str) -> bindgen::callbacks::MacroParsingBehavior {
         if self.0.contains(name) {
             bindgen::callbacks::MacroParsingBehavior::Ignore
-        }
-        else {
+        } else {
             bindgen::callbacks::MacroParsingBehavior::Default
         }
     }
@@ -20,7 +19,7 @@ impl bindgen::callbacks::ParseCallbacks for IgnoreMacros {
 
 fn main() {
     println!("cargo:rustc-link-lib=mpc");
-    
+
     let ignored_macros = IgnoreMacros(
         vec![
             "FP_INFINITE".into(),
@@ -31,8 +30,8 @@ fn main() {
         ]
         .into_iter()
         .collect(),
-    );   
-    
+    );
+
     let bindings = bindgen::Builder::default()
         .clang_args(["-std=c99", "-ledit", "-lm"].iter())
         .header("mpc.h")
@@ -40,7 +39,7 @@ fn main() {
         .rustfmt_bindings(true)
         .generate()
         .expect("Unable to generate bindings");
-        
+
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
     bindings
         .write_to_file(out_path.join("bindings.rs"))

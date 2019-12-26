@@ -4,8 +4,9 @@
 
 cc -std=c99 -c -ledit -lm mpc.c
 
-ar rc libmpc.a mpc.o
+//ar rc libmpc.a mpc.o
+gcc -g -fPIC mpc.c -shared -o libmpc.so
 
-cp libmpc.a interpreter/target/deps
+cp libmpc.so interpreter/target/deps
 
 cargo build
